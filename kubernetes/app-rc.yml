@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    name: app
+  name: k8s-rails-demo
+spec:
+  replicas: 4
+  selector:
+    name: app
+  template:
+    metadata:
+      labels:
+        name: app
+    spec:
+      containers:
+        - image: infoslack/k8s-demo:latest
+          name: app
+          ports:
+            - containerPort: 4000
+              name: http-server
+          env:
+            - name: "DATABASE_URL"
+              value: "postgres://user:password@host:port/database"
+            - name: "SECRET_KEY_BASE"
+              value: "xxxxxxxxxxxxxxxx999999999999xxxxxxxxxxxxxx"
+          command: ["passenger", "start", "-p", "4000", "-e", "production"]
